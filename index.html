@@ -1,1303 +1,376 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Gestor de Coleção • Dashboard</title>
-<meta name="description" content="Sistema profissional de gerenciamento de qualquer tipo de coleção, com cards, fotos, Google Sheets e Google Drive.">
+  <meta charset="UTF-8" />
+  <title>Gerenciador de Coleção</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<style>
-:root{
-  --bg:#020617;
-  --surface:#020617;
-  --surface-soft:#0b1220;
-  --surface-alt:#111827;
-  --accent:#22c55e;
-  --accent-strong:#16a34a;
-  --border:#1f2937;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
-  --radius-lg:22px;
-  --radius-md:12px;
-  --shadow-soft:0 18px 45px rgba(15,23,42,.8);
-  --shadow-sm:0 8px 24px rgba(15,23,42,.7);
-}
+  <!-- CSS base + temas -->
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/table.css">
+  <link rel="stylesheet" href="assets/css/theme-light.css">
+  <link rel="stylesheet" href="assets/css/theme-dark.css">
 
-*{box-sizing:border-box;margin:0;padding:0}
-
-html,body{
-  height:100%;
-  min-height:100vh;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
-  background-color:#020617;
-  background-image:radial-gradient(circle at top,#1f2937 0,#020617 52%,#000 100%);
-  background-repeat:no-repeat;
-  background-attachment:fixed;
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-}
-
-/* CONTAINER PRINCIPAL */
-.app{
-  max-width:960px;
-  margin:18px auto 32px;
-  padding:10px;
-}
-
-/* TELA DE LOGIN */
-.login-shell{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-}
-.login-card{
-  width:100%;
-  max-width:420px;
-  background:radial-gradient(circle at top left,#22c55e11,#020617 55%,#000 100%);
-  border-radius:24px;
-  border:1px solid rgba(148,163,184,.38);
-  box-shadow:var(--shadow-soft);
-  padding:18px 18px 20px;
-}
-.login-header{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:14px;
-}
-.logo-pill{
-  width:42px;height:42px;border-radius:999px;
-  background:radial-gradient(circle at 30% 20%,#bbf7d0 0,#22c55e 45%,#0f766e 100%);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 0 1px rgba(15,23,42,.4),0 0 24px rgba(34,197,94,.75);
-}
-.logo-pill span{
-  font-weight:800;font-size:18px;color:#022c22;
-}
-.login-title{
-  font-size:18px;font-weight:600;
-}
-.login-sub{
-  font-size:12px;color:var(--muted);
-}
-.login-section-label{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:.16em;
-  color:var(--muted);
-  margin:10px 0 6px;
-}
-.login-input{
-  width:100%;
-  border-radius:999px;
-  border:1px solid rgba(51,65,85,.95);
-  background:rgba(15,23,42,.9);
-  color:var(--text);
-  padding:10px 13px;
-  font-size:13px;
-  outline:none;
-}
-.login-input::placeholder{color:var(--muted);}
-.login-btn-primary{
-  margin-top:10px;
-  width:100%;
-  border-radius:999px;
-  border:none;
-  padding:11px 14px;
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-  color:#022c22;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  box-shadow:0 14px 32px rgba(34,197,94,.45);
-}
-.login-btn-ghost{
-  margin-top:10px;
-  width:100%;
-  border-radius:999px;
-  padding:11px 14px;
-  background:rgba(15,23,42,.85);
-  color:var(--text);
-  font-size:13px;
-  border:1px solid rgba(148,163,184,.5);
-  cursor:pointer;
-}
-
-/* HEADER DO APP */
-.header-card{
-  background:radial-gradient(circle at top left,#22c55e13,#020617 55%,#000 100%);
-  border-radius:var(--radius-lg);
-  border:1px solid rgba(148,163,184,.35);
-  box-shadow:var(--shadow-soft);
-  padding:14px 14px 12px;
-}
-.header-top{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:10px;
-}
-.header-text-title{
-  font-size:17px;
-  font-weight:600;
-}
-.header-text-sub{
-  font-size:11px;
-  color:var(--muted);
-}
-
-/* TABS */
-.tab-row{
-  margin-top:4px;
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-}
-.tab-btn{
-  border-radius:999px;
-  padding:6px 14px;
-  border:1px solid rgba(148,163,184,.4);
-  background:rgba(15,23,42,.9);
-  color:var(--muted);
-  font-size:12px;
-  cursor:pointer;
-}
-.tab-btn[data-active="true"]{
-  background:radial-gradient(circle at 0 0,#22c55e44,transparent 55%),rgba(15,23,42,.95);
-  color:#ecfdf5;
-  border-color:rgba(34,197,94,.7);
-  box-shadow:0 0 0 1px rgba(34,197,94,.5),0 10px 28px rgba(15,23,42,.85);
-}
-
-/* HEADER INFOS + BOTÃO NOVO ITEM */
-.header-bottom{
-  margin-top:14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.header-bottom-left{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-.header-bottom-title{
-  font-size:14px;
-  font-weight:600;
-}
-.header-bottom-sub{
-  font-size:11px;
-  color:var(--muted);
-}
-.primary-btn{
-  border-radius:999px;
-  border:none;
-  padding:8px 16px;
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-  color:#022c22;
-  font-size:12px;
-  font-weight:600;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  cursor:pointer;
-  box-shadow:0 14px 32px rgba(34,197,94,.45);
-}
-.primary-btn span.icon{
-  width:18px;height:18px;border-radius:999px;
-  border:1px solid rgba(21,128,61,.7);
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(22,163,74,.16);
-  font-size:14px;
-}
-
-/* LINHA DE BUSCA + FILTROS */
-.filters-row{
-  margin-top:10px;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.search-input{
-  flex:1 1 180px;
-  border-radius:999px;
-  border:1px solid rgba(51,65,85,.9);
-  background:rgba(15,23,42,.92);
-  color:var(--text);
-  padding:8px 12px;
-  font-size:12px;
-}
-.search-input::placeholder{color:var(--muted);}
-.select-filter{
-  border-radius:999px;
-  border:1px solid rgba(51,65,85,.9);
-  background:rgba(15,23,42,.98);
-  color:var(--muted);
-  padding:8px 12px;
-  font-size:12px;
-}
-
-/* CARDS LISTAGEM */
-.pages{margin-top:12px;}
-.tab-page{display:none;animation:fadeIn .2s ease-in-out;}
-.tab-page[data-active="true"]{display:block;}
-
-.cards-grid{
-  display:grid;
-  grid-template-columns:repeat(1,minmax(0,1fr));
-  gap:10px;
-  margin-top:6px;
-}
-@media(min-width:640px){
-  .cards-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-}
-.card-item{
-  background:radial-gradient(circle at top left,rgba(15,23,42,.95),rgba(15,23,42,.99));
-  border-radius:var(--radius-md);
-  border:1px solid rgba(31,41,55,.95);
-  box-shadow:var(--shadow-sm);
-  padding:10px;
-  display:flex;
-  gap:10px;
-}
-.card-thumb{
-  flex:0 0 90px;
-  height:90px;
-  border-radius:10px;
-  overflow:hidden;
-  background:#020617;
-  border:1px solid rgba(51,65,85,.9);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.card-thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.card-body{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.card-title-line{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:6px;
-}
-.card-item-name{
-  font-size:13px;
-  font-weight:600;
-}
-.card-item-chip{
-  font-size:10px;
-  padding:3px 8px;
-  border-radius:999px;
-  border:1px solid rgba(55,65,81,.9);
-  color:var(--muted);
-}
-.card-meta{
-  font-size:11px;
-  color:var(--muted);
-}
-.card-meta span+span::before{
-  content:"•";
-  margin:0 4px;
-  color:rgba(75,85,99,.9);
-}
-.card-footer{
-  margin-top:4px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-}
-.card-price{
-  font-size:12px;
-  font-weight:600;
-}
-.card-actions{
-  display:flex;
-  gap:6px;
-}
-.card-btn{
-  border-radius:999px;
-  padding:4px 8px;
-  font-size:11px;
-  border:1px solid rgba(55,65,81,.95);
-  background:rgba(15,23,42,.95);
-  color:var(--text);
-  cursor:pointer;
-}
-.card-btn-secondary{
-  background:rgba(15,23,42,.85);
-}
-
-/* VISITANTE (oculta valores e botão novo item) */
-body.modo-visitante .card-price{filter:blur(6px);}
-body.modo-visitante #btnNovoItem{display:none;}
-body.modo-visitante .dashboard-money{filter:blur(6px);}
-
-/* DASHBOARD CARDS SIMPLES */
-.dashboard-cards{
-  display:grid;
-  grid-template-columns:repeat(1,minmax(0,1fr));
-  gap:8px;
-  margin-top:8px;
-}
-@media(min-width:640px){
-  .dashboard-cards{grid-template-columns:repeat(3,minmax(0,1fr));}
-}
-.dashboard-card{
-  background:radial-gradient(circle at top left,rgba(15,23,42,.96),rgba(15,23,42,.99));
-  border-radius:var(--radius-md);
-  border:1px solid rgba(31,41,55,.95);
-  padding:10px;
-  box-shadow:var(--shadow-sm);
-}
-.dashboard-label{
-  font-size:11px;
-  color:var(--muted);
-}
-.dashboard-value{
-  margin-top:4px;
-  font-size:18px;
-  font-weight:600;
-}
-.dashboard-sub{
-  font-size:10px;
-  color:var(--muted);
-}
-
-/* MODAL - BACKDROP */
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(15,23,42,.88);
-  display:none;
-  align-items:flex-start;
-  justify-content:center;
-  z-index:40;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:18px 10px;
-}
-.modal{
-  width:100%;
-  max-width:560px;
-  margin:20px auto;
-  background:radial-gradient(circle at top,#0b1120,#020617);
-  border-radius:20px;
-  border:1px solid rgba(148,163,184,.35);
-  box-shadow:0 24px 60px rgba(0,0,0,.9);
-  padding:16px 14px 18px;
-  position:relative;
-}
-.modal-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  margin-bottom:12px;
-}
-.modal-title-group{
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-}
-.modal-title{
-  font-size:17px;
-  font-weight:600;
-}
-.modal-sub{
-  font-size:12px;
-  color:var(--muted);
-}
-.modal-close{
-  border:none;
-  background:rgba(15,23,42,.85);
-  border-radius:999px;
-  border:1px solid rgba(55,65,81,.9);
-  width:28px;
-  height:28px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  color:var(--muted);
-  font-size:14px;
-}
-
-/* GRID DO FORM */
-.modal-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-  margin-bottom:14px;
-}
-.modal-grid-full{grid-column:1/-1;}
-@media(max-width:640px){
-  .modal-grid{grid-template-columns:1fr;}
-}
-.label{
-  font-size:11px;
-  color:var(--muted);
-  margin-bottom:4px;
-}
-.field{
-  width:100%;
-  border-radius:999px;
-  border:1px solid rgba(55,65,81,.9);
-  background:rgba(15,23,42,.9);
-  padding:10px 12px;
-  font-size:13px;
-  color:var(--text);
-  outline:none;
-}
-.field::placeholder{color:var(--muted);}
-.field-select{appearance:none;}
-
-/* UPLOAD */
-.upload-stack{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.upload-box{
-  background:rgba(15,23,42,.7);
-  border:1px dashed rgba(148,163,184,.45);
-  padding:12px;
-  border-radius:14px;
-  text-align:center;
-  cursor:pointer;
-  transition:.15s;
-}
-.upload-box:hover{
-  background:rgba(34,197,94,.08);
-  border-color:rgba(74,222,128,.7);
-}
-.upload-box input{display:none;}
-.upload-title{
-  font-size:12px;
-  font-weight:600;
-}
-.upload-sub{
-  font-size:12px;
-  color:var(--muted);
-}
-.preview-img{
-  margin-top:8px;
-  width:140px;
-  height:140px;
-  object-fit:cover;
-  border-radius:12px;
-  border:1px solid rgba(148,163,184,.4);
-  display:none;
-}
-
-/* BOTÃO IA */
-.ia-row{
-  margin:8px 0 14px;
-  text-align:center;
-}
-.ia-btn{
-  border-radius:999px;
-  border:1px solid rgba(34,197,94,.7);
-  background:rgba(22,163,74,.12);
-  color:#bbf7d0;
-  padding:7px 18px;
-  font-size:12px;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  cursor:pointer;
-}
-.ia-btn span.icon{
-  font-size:13px;
-}
-.ia-status{
-  margin-top:6px;
-  font-size:11px;
-  color:var(--muted);
-}
-
-/* RODAPÉ MODAL */
-.modal-footer{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-top:6px;
-}
-.modal-footer-left{
-  font-size:11px;
-  color:var(--muted);
-}
-.modal-footer-right{
-  display:flex;
-  gap:8px;
-}
-.text-btn{
-  background:transparent;
-  border:none;
-  color:var(--muted);
-  font-size:12px;
-  cursor:pointer;
-}
-.text-btn.danger{color:#fecaca;}
-
-/* GALERIA */
-.gallery-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.92);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:70;
-}
-.gallery{
-  max-width:90%;
-  max-height:90%;
-}
-.gallery img{
-  max-width:100%;
-  max-height:100%;
-  border-radius:12px;
-  box-shadow:0 0 40px rgba(0,0,0,.6);
-}
-.gallery-close{
-  position:absolute;
-  top:20px;
-  right:20px;
-  background:#111;
-  border:none;
-  color:#fff;
-  padding:8px 12px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:14px;
-}
-
-/* animação */
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(6px);}
-  to{opacity:1;transform:translateY(0);}
-}
-</style>
+  <!-- Fonte (opcional, mas combina bem) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 </head>
-<body>
 
-<!-- LOGIN -->
-<div id="loginScreen" class="login-shell">
-  <div class="login-card">
-    <div class="login-header">
-      <div class="logo-pill"><span>GC</span></div>
-      <div>
-        <div class="login-title">Gestor de Coleção</div>
-        <div class="login-sub">Escolha como deseja entrar.</div>
+<!-- Começamos no tema claro; o JS (theme.js) alterna theme-light / theme-dark -->
+<body class="theme-light">
+
+  <!-- =======================
+       TELA DE BOAS-VINDAS
+  ======================== -->
+  <section id="welcome-screen" class="screen">
+    <div class="welcome-container">
+      <h1 class="title">Gerenciador de Coleção</h1>
+      <p class="subtitle">Escolha como deseja acessar</p>
+
+      <div class="welcome-box">
+        <!-- CARD VISITANTE -->
+        <article class="card">
+          <!-- Ícone (coloque uma imagem em assets/img/visitor.svg se quiser) -->
+          <img src="assets/img/visitor.svg" alt="Visitante" class="card-icon" onerror="this.style.display='none'">
+
+          <h2>Modo Visitante</h2>
+          <ul class="card-list">
+            <li>✓ Ver todos os itens</li>
+            <li>✓ Buscar e filtrar</li>
+            <li>✓ Ver estatísticas básicas</li>
+            <li>✕ Valores ocultos</li>
+            <li>✕ Sem edição</li>
+          </ul>
+
+          <button id="btn-visitor" class="btn btn-primary">
+            Entrar como Visitante
+          </button>
+        </article>
+
+        <!-- CARD ADMIN -->
+        <article class="card">
+          <img src="assets/img/admin.svg" alt="Administrador" class="card-icon" onerror="this.style.display='none'">
+
+          <h2>Modo Administrador</h2>
+          <ul class="card-list">
+            <li>✓ Adicionar itens</li>
+            <li>✓ Editar e excluir</li>
+            <li>✓ Ver valores</li>
+            <li>✓ Sincronizar Sheets</li>
+          </ul>
+
+          <button id="btn-admin" class="btn btn-purple">
+            Entrar como Administrador
+          </button>
+        </article>
       </div>
-    </div>
-
-    <div class="login-section-label">Modo administrador</div>
-    <input id="senhaAdmin" class="login-input" type="password" placeholder="Início do seu CPF">
-
-    <button id="btnLoginAdmin" class="login-btn-primary">Entrar como admin</button>
-
-    <div class="login-section-label" style="margin-top:16px;">Visitante</div>
-    <button id="btnLoginVisitante" class="login-btn-ghost">
-      Entrar como visitante (somente leitura, sem valores em dinheiro)
-    </button>
-  </div>
-</div>
-
-<!-- APP -->
-<div id="appRoot" class="app" style="display:none;">
-
-  <section class="header-card">
-    <div class="header-top">
-      <div class="logo-pill"><span>GC</span></div>
-      <div>
-        <div class="header-text-title">Gestor de Coleção</div>
-        <div class="header-text-sub">Funciona para qualquer tipo de coleção, com cards e fotos.</div>
-      </div>
-    </div>
-
-    <div class="tab-row">
-      <button class="tab-btn" data-tab="dashboard" data-active="true">Dashboard</button>
-      <button class="tab-btn" data-tab="colecao">Coleção</button>
-      <button class="tab-btn" data-tab="prevenda">Pré-venda</button>
-      <button class="tab-btn" data-tab="garagem">Armazenados</button>
-    </div>
-
-    <div class="header-bottom">
-      <div class="header-bottom-left">
-        <div class="header-bottom-title" id="headerPageTitle">Dashboard</div>
-        <div class="header-bottom-sub" id="headerPageSub">Resumo geral da coleção</div>
-      </div>
-      <button class="primary-btn" id="btnNovoItem">
-        <span class="icon">＋</span> Novo Item
-      </button>
-    </div>
-
-    <div class="filters-row">
-      <input id="buscaInput" class="search-input" placeholder="Buscar por nome, marca, modelo..." />
-      <select id="filtroOrdenacao" class="select-filter">
-        <option value="recentes">Mais recentes</option>
-        <option value="nomeAZ">Nome A → Z</option>
-        <option value="nomeZA">Nome Z → A</option>
-        <option value="maisCaro">Mais caro</option>
-        <option value="maisBarato">Mais barato</option>
-      </select>
     </div>
   </section>
 
-  <!-- PÁGINAS -->
-  <section class="pages">
-    <!-- DASHBOARD -->
-    <div class="tab-page" id="tab-dashboard" data-active="true">
-      <div class="dashboard-cards">
-        <article class="dashboard-card">
-          <div class="dashboard-label">Valor total da coleção</div>
-          <div class="dashboard-value dashboard-money" id="dashValorColecao">R$ 0,00</div>
-          <div class="dashboard-sub" id="dashQtdColecao">0 itens</div>
-        </article>
-        <article class="dashboard-card">
-          <div class="dashboard-label">Valor em pré-venda</div>
-          <div class="dashboard-value dashboard-money" id="dashValorPrevenda">R$ 0,00</div>
-          <div class="dashboard-sub" id="dashQtdPrevenda">0 itens</div>
-        </article>
-        <article class="dashboard-card">
-          <div class="dashboard-label">Valor em itens armazenados</div>
-          <div class="dashboard-value dashboard-money" id="dashValorGaragem">R$ 0,00</div>
-          <div class="dashboard-sub" id="dashQtdGaragem">0 itens</div>
-        </article>
-      </div>
-    </div>
+  <!-- =======================
+       TELA DE LOGIN ADMIN
+  ======================== -->
+  <section id="admin-login-screen" class="screen hidden">
+    <div class="login-container">
+      <h1>Acesso Administrativo</h1>
+      <p>Digite a senha para continuar</p>
 
-    <!-- COLEÇÃO -->
-    <div class="tab-page" id="tab-colecao">
-      <div class="cards-grid" id="cardsColecao"></div>
-    </div>
+      <input
+        id="admin-password-input"
+        type="password"
+        placeholder="Senha de administrador"
+      >
 
-    <!-- PRÉ-VENDA -->
-    <div class="tab-page" id="tab-prevenda">
-      <div class="cards-grid" id="cardsPrevenda"></div>
-    </div>
-
-    <!-- ARMAZENADOS -->
-    <div class="tab-page" id="tab-garagem">
-      <div class="cards-grid" id="cardsGaragem"></div>
-    </div>
-  </section>
-</div>
-
-<script>
-/* ================= CONFIG BACKEND ===================== */
-const API_URL = "https://script.google.com/macros/s/AKfycbwob3DY9XUBDKWcdQq166nVxbQxm4ATkaeRkUJl4wIYg9vJQErSlL7_PdCYgYN3_03O/exec";
-
-/* ================= ESTADO GLOBAL ===================== */
-let itens = [];
-let documentoEditando = null;
-let isAdmin = false;
-
-/* ================= LOGIN ============================= */
-const loginScreen = document.getElementById("loginScreen");
-const appRoot     = document.getElementById("appRoot");
-const senhaAdmin  = document.getElementById("senhaAdmin");
-const btnLoginAdmin = document.getElementById("btnLoginAdmin");
-const btnLoginVisitante = document.getElementById("btnLoginVisitante");
-
-btnLoginAdmin.addEventListener("click", ()=>{
-  const senha = senhaAdmin.value.trim();
-  const senhaCorreta = "467539"; // início do seu CPF
-  if(senha === senhaCorreta){
-    isAdmin = true;
-    document.body.classList.remove("modo-visitante");
-    loginScreen.style.display = "none";
-    appRoot.style.display = "block";
-  }else{
-    alert("Senha incorreta. Acesso apenas leitura será usado.");
-    isAdmin = false;
-    document.body.classList.add("modo-visitante");
-    loginScreen.style.display = "none";
-    appRoot.style.display = "block";
-  }
-});
-
-btnLoginVisitante.addEventListener("click", ()=>{
-  isAdmin = false;
-  document.body.classList.add("modo-visitante");
-  loginScreen.style.display = "none";
-  appRoot.style.display = "block";
-});
-
-/* ================= MODAL + GALERIA =================== */
-const modalBackdrop = document.createElement("div");
-modalBackdrop.className = "modal-backdrop";
-modalBackdrop.innerHTML = `
-  <div class="modal" id="modalItem">
-    <div class="modal-header">
-      <div class="modal-title-group">
-        <div class="modal-title" id="modalTitulo">Novo Item</div>
-        <div class="modal-sub">Envie as fotos, peça ajuda da IA e escolha para onde o item vai.</div>
-      </div>
-      <button class="modal-close" id="btnFecharModal">✕</button>
-    </div>
-
-    <div class="modal-grid modal-grid-full">
-      <div class="modal-grid-full">
-        <label class="label">Fotos do Item</label>
-        <div class="upload-stack">
-          <label class="upload-box">
-            <div class="upload-title">Foto 1 (obrigatória)</div>
-            <div class="upload-sub">Clique para enviar foto</div>
-            <input type="file" id="foto1" accept="image/*">
-            <img id="preview1" class="preview-img">
-          </label>
-          <label class="upload-box">
-            <div class="upload-title">Foto 2 (opcional)</div>
-            <div class="upload-sub">Clique para enviar foto</div>
-            <input type="file" id="foto2" accept="image/*">
-            <img id="preview2" class="preview-img">
-          </label>
-          <label class="upload-box">
-            <div class="upload-title">Foto 3 (opcional)</div>
-            <div class="upload-sub">Clique para enviar foto</div>
-            <input type="file" id="foto3" accept="image/*">
-            <img id="preview3" class="preview-img">
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <div class="ia-row">
-      <button id="btnIA" class="ia-btn">
-        <span class="icon">⚙️</span>
-        IA: analisar imagens e preencher dados
-      </button>
-      <div id="iaStatus" class="ia-status"></div>
-    </div>
-
-    <div class="modal-grid">
-      <div class="modal-grid-full">
-        <label class="label">Nome do Item</label>
-        <input id="inpNome" class="field" placeholder="Ex: Hot Wheels Elite 64 Porsche 911">
-      </div>
-
-      <div>
-        <label class="label">Categoria (Destino)</label>
-        <select id="inpCategoria" class="field field-select">
-          <option value="Colecao">Coleção (itens principais)</option>
-          <option value="Prevenda">Pré-venda / reservado</option>
-          <option value="Garagem">Armazenado em outro local</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="label">Tipo de Coleção</label>
-        <input id="inpTipoColecao" class="field" placeholder="Ex: miniaturas, livros, moedas, cards...">
-      </div>
-
-      <div>
-        <label class="label">Marca</label>
-        <input id="inpMarca" class="field" placeholder="Ex: Hot Wheels, Mattel, Hasbro...">
-      </div>
-
-      <div>
-        <label class="label">Modelo</label>
-        <input id="inpModelo" class="field" placeholder="Ex: Porsche 911 GT3, edição limitada...">
-      </div>
-
-      <div>
-        <label class="label">Fabricante</label>
-        <input id="inpFabricante" class="field" placeholder="Ex: Mattel Inc., Hasbro...">
-      </div>
-
-      <div>
-        <label class="label">Ano de lançamento</label>
-        <input id="inpAnoLanc" class="field" placeholder="Ex: 2023">
-      </div>
-
-      <div>
-        <label class="label">Série / Coleção</label>
-        <input id="inpSerie" class="field" placeholder="Ex: Fast & Furious, série especial...">
-      </div>
-
-      <div class="modal-grid-full">
-        <label class="label">Descrição</label>
-        <input id="inpDescricao" class="field" placeholder="A IA pode preencher isso automaticamente...">
-      </div>
-
-      <div class="modal-grid-full">
-        <label class="label">Análise da Condição Física</label>
-        <input id="inpAnaliseCond" class="field" placeholder="A IA vai analisar riscos, desgaste, embalagem, etc.">
-      </div>
-
-      <div class="modal-grid-full">
-        <label class="label">Valor Pago</label>
-        <input id="inpValorPago" class="field" type="number" min="0" step="0.01" placeholder="Ex: 150,00">
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <div class="modal-footer-left">Gestor de Coleção • Qualquer tipo de coleção</div>
-      <div class="modal-footer-right">
-        <button class="text-btn danger" id="btnExcluir" style="display:none;">Excluir</button>
-        <button class="primary-btn" id="btnSalvarItem">
-          <span class="icon">💾</span> Salvar
+      <div style="display:flex; gap:0.6rem; justify-content:center; margin-top:0.5rem;">
+        <button id="btn-admin-login" class="btn btn-purple">
+          Entrar
+        </button>
+        <button id="btn-admin-back" class="btn btn-gray">
+          Voltar
         </button>
       </div>
     </div>
-  </div>
-`;
-document.body.appendChild(modalBackdrop);
+  </section>
 
-/* NOVO: fechar modal ao clicar FORA da caixa */
-modalBackdrop.addEventListener("click", function(e){
-  if(e.target === modalBackdrop){
-    fecharModal();
-  }
-});
+  <!-- =======================
+       TELA ADMINISTRADOR
+  ======================== -->
+  <section id="admin-screen" class="screen hidden">
 
-const galeriaBackdrop = document.createElement("div");
-galeriaBackdrop.className = "gallery-backdrop";
-galeriaBackdrop.innerHTML = `
-  <button class="gallery-close" onclick="fecharGaleria()">Fechar</button>
-  <div class="gallery">
-    <img id="galeriaImg">
-  </div>
-`;
-document.body.appendChild(galeriaBackdrop);
-
-/* Referências de campos do modal */
-const inpNome         = () => document.getElementById("inpNome");
-const inpCategoria    = () => document.getElementById("inpCategoria");
-const inpTipoColecao  = () => document.getElementById("inpTipoColecao");
-const inpMarca        = () => document.getElementById("inpMarca");
-const inpModelo       = () => document.getElementById("inpModelo");
-const inpFabricante   = () => document.getElementById("inpFabricante");
-const inpAnoLanc      = () => document.getElementById("inpAnoLanc");
-const inpSerie        = () => document.getElementById("inpSerie");
-const inpDescricao    = () => document.getElementById("inpDescricao");
-const inpAnaliseCond  = () => document.getElementById("inpAnaliseCond");
-const inpValorPago    = () => document.getElementById("inpValorPago");
-
-const iaStatusEl      = document.getElementById("iaStatus");
-
-/* Abrir / fechar modal */
-function abrirModal(id){
-  modalBackdrop.style.display = "flex";
-  document.body.style.overflow = "hidden";
-
-  if(id){ preencherModalParaEdicao(id); }
-  else { limparModal(); documentoEditando = null; }
-}
-function fecharModal(){
-  modalBackdrop.style.display = "none";
-  document.body.style.overflow = "";
-}
-document.getElementById("btnFecharModal").addEventListener("click", fecharModal);
-
-/* Limpar modal */
-function limparModal(){
-  document.getElementById("modalTitulo").innerText = "Novo Item";
-  document.getElementById("btnExcluir").style.display = "none";
-  iaStatusEl.textContent = "";
-
-  inpNome().value        = "";
-  inpCategoria().value   = "Colecao";
-  inpTipoColecao().value = "";
-  inpMarca().value       = "";
-  inpModelo().value      = "";
-  inpFabricante().value  = "";
-  inpAnoLanc().value     = "";
-  inpSerie().value       = "";
-  inpDescricao().value   = "";
-  inpAnaliseCond().value = "";
-  inpValorPago().value   = "";
-
-  ["preview1","preview2","preview3"].forEach(id=>{
-    const el = document.getElementById(id);
-    el.style.display="none"; el.src="";
-  });
-  ["foto1","foto2","foto3"].forEach(id=>{
-    document.getElementById(id).value="";
-  });
-}
-
-/* Previews de imagem */
-["foto1","foto2","foto3"].forEach((id,idx)=>{
-  document.getElementById(id).addEventListener("change", function(e){
-    const file = e.target.files[0];
-    if(file){
-      const preview = document.getElementById("preview"+(idx+1));
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = "block";
-    }
-  });
-});
-
-/* Galeria */
-function abrirGaleria(f1,f2,f3){
-  const imgs = [f1,f2,f3].filter(x=>x && x!=="null" && x!=="undefined");
-  if(imgs.length===0){
-    alert("Nenhuma foto disponível.");
-    return;
-  }
-  let atual = 0;
-  const imgEl = document.getElementById("galeriaImg");
-  imgEl.src = imgs[0];
-  galeriaBackdrop.style.display="flex";
-
-  galeriaBackdrop.onclick = (e)=>{
-    if(e.target === galeriaBackdrop){
-      atual = (atual+1) % imgs.length;
-      imgEl.src = imgs[atual];
-    }
-  }
-}
-function fecharGaleria(){
-  galeriaBackdrop.style.display="none";
-}
-
-/* ================= TABS / HEADER TEXT ================= */
-const tabButtons = document.querySelectorAll(".tab-btn");
-const pages = {
-  dashboard: document.getElementById("tab-dashboard"),
-  colecao  : document.getElementById("tab-colecao"),
-  prevenda : document.getElementById("tab-prevenda"),
-  garagem  : document.getElementById("tab-garagem")
-};
-const headerPageTitle = document.getElementById("headerPageTitle");
-const headerPageSub   = document.getElementById("headerPageSub");
-
-const textosHeader = {
-  dashboard:{title:"Dashboard", sub:"Resumo geral da coleção"},
-  colecao  :{title:"Coleção",   sub:"Visualize apenas os itens principais da coleção"},
-  prevenda :{title:"Pré-venda", sub:"Acompanhe reservas e itens que ainda vão chegar"},
-  garagem  :{title:"Armazenados",sub:"Itens guardados em outros locais (caixas, outra casa, etc.)"}
-};
-
-tabButtons.forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const tab = btn.dataset.tab;
-    tabButtons.forEach(b=>b.removeAttribute("data-active"));
-    btn.setAttribute("data-active","true");
-
-    Object.keys(pages).forEach(k=>pages[k].removeAttribute("data-active"));
-    pages[tab].setAttribute("data-active","true");
-
-    headerPageTitle.textContent = textosHeader[tab].title;
-    headerPageSub.textContent   = textosHeader[tab].sub;
-    renderizarCards(); // reaplica busca/filtros para aba atual
-  });
-});
-
-/* Botão novo item */
-document.getElementById("btnNovoItem").addEventListener("click", ()=>{
-  if(!isAdmin){
-    alert("Apenas o administrador pode adicionar itens.");
-    return;
-  }
-  abrirModal();
-});
-
-/* ================= BUSCA + FILTRO ===================== */
-const buscaInput = document.getElementById("buscaInput");
-const filtroOrdenacao = document.getElementById("filtroOrdenacao");
-
-buscaInput.addEventListener("input", renderizarCards);
-filtroOrdenacao.addEventListener("change", renderizarCards);
-
-/* ================= CHAMADAS AO BACKEND ================ */
-async function enviarFotoParaDrive(arquivo){
-  if(!arquivo) return null;
-  const form = new FormData();
-  form.append("foto", arquivo);
-  form.append("action","uploadFoto");
-  try{
-    const resp = await fetch(API_URL, {method:"POST", body:form});
-    const data = await resp.json();
-    if(data.status === "sucesso"){
-      return data.url;
-    }else{
-      console.error("Erro upload foto:", data);
-      return null;
-    }
-  }catch(e){
-    console.error("Falha upload foto:", e);
-    return null;
-  }
-}
-
-async function carregarItensDaPlanilha(){
-  try{
-    const resp = await fetch(API_URL + "?action=listarItens");
-    const data = await resp.json();
-    if(data.status === "sucesso"){
-      itens = data.itens || [];
-      renderizarCards();
-      atualizarDashboard();
-    }else{
-      console.error("Erro listarItens:", data);
-    }
-  }catch(e){
-    console.error("Falha listarItens:", e);
-  }
-}
-
-/* SALVAR ITEM */
-document.getElementById("btnSalvarItem").addEventListener("click", async ()=>{
-  if(!isAdmin){
-    alert("Somente o administrador pode salvar.");
-    return;
-  }
-  const nome = inpNome().value.trim();
-  if(!nome){
-    alert("O nome é obrigatório."); return;
-  }
-
-  const fotoFile1 = document.getElementById("foto1").files[0];
-  if(!documentoEditando && !fotoFile1){
-    alert("Envie pelo menos a Foto 1.");
-    return;
-  }
-
-  let item = {
-    id: documentoEditando ? documentoEditando : Date.now().toString(),
-    nome: inpNome().value.trim(),
-    marca: inpMarca().value.trim(),
-    modelo: inpModelo().value.trim(),
-    fabricante: inpFabricante().value.trim(),
-    anoLancamento: inpAnoLanc().value.trim(),
-    serie: inpSerie().value.trim(),
-    categoria: inpCategoria().value,
-    tipoColecao: inpTipoColecao().value.trim(),
-    descricao: inpDescricao().value.trim(),
-    analiseCondicao: inpAnaliseCond().value.trim(),
-    valorPago: inpValorPago().value.trim() || "0",
-    foto1:null, foto2:null, foto3:null
-  };
-
-  const f2 = document.getElementById("foto2").files[0];
-  const f3 = document.getElementById("foto3").files[0];
-
-  // upload das fotos
-  if(fotoFile1) item.foto1 = await enviarFotoParaDrive(fotoFile1);
-  if(f2) item.foto2 = await enviarFotoParaDrive(f2);
-  if(f3) item.foto3 = await enviarFotoParaDrive(f3);
-
-  // se estiver editando, preserva URLs antigas quando não trocar
-  if(documentoEditando){
-    const antigo = itens.find(i=>i.id===documentoEditando);
-    if(antigo){
-      if(!item.foto1) item.foto1 = antigo.foto1;
-      if(!item.foto2) item.foto2 = antigo.foto2;
-      if(!item.foto3) item.foto3 = antigo.foto3;
-    }
-  }
-
-  try{
-    const resp = await fetch(API_URL + "?action=salvarItem",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(item)
-    });
-    const data = await resp.json();
-    if(data.status === "sucesso"){
-      fecharModal();
-      carregarItensDaPlanilha();
-    }else{
-      alert("Erro ao salvar item.");
-      console.error(data);
-    }
-  }catch(e){
-    alert("Falha de comunicação com Google Sheets.");
-    console.error(e);
-  }
-});
-
-/* EDITAR ITEM */
-function preencherModalParaEdicao(id){
-  limparModal();
-  documentoEditando = id;
-  const item = itens.find(i=>i.id===id);
-  if(!item){
-    alert("Item não encontrado."); return;
-  }
-
-  document.getElementById("modalTitulo").innerText = "Editar Item";
-  document.getElementById("btnExcluir").style.display = "block";
-
-  inpNome().value        = item.nome || "";
-  inpCategoria().value   = item.categoria || "Colecao";
-  inpTipoColecao().value = item.tipoColecao || "";
-  inpMarca().value       = item.marca || "";
-  inpModelo().value      = item.modelo || "";
-  inpFabricante().value  = item.fabricante || "";
-  inpAnoLanc().value     = item.anoLancamento || "";
-  inpSerie().value       = item.serie || "";
-  inpDescricao().value   = item.descricao || "";
-  inpAnaliseCond().value = item.analiseCondicao || "";
-  inpValorPago().value   = item.valorPago || "";
-
-  if(item.foto1){
-    const p1 = document.getElementById("preview1");
-    p1.src = item.foto1; p1.style.display="block";
-  }
-  if(item.foto2){
-    const p2 = document.getElementById("preview2");
-    p2.src = item.foto2; p2.style.display="block";
-  }
-  if(item.foto3){
-    const p3 = document.getElementById("preview3");
-    p3.src = item.foto3; p3.style.display="block";
-  }
-}
-
-/* EXCLUIR ITEM */
-document.getElementById("btnExcluir").addEventListener("click", async ()=>{
-  if(!documentoEditando) return;
-  if(!confirm("Deseja realmente excluir este item?")) return;
-
-  try{
-    const resp = await fetch(API_URL + "?action=excluirItem&id="+encodeURIComponent(documentoEditando));
-    const data = await resp.json();
-    if(data.status === "sucesso"){
-      fecharModal();
-      carregarItensDaPlanilha();
-    }else{
-      alert("Erro ao excluir item.");
-    }
-  }catch(e){
-    alert("Falha ao excluir item.");
-    console.error(e);
-  }
-});
-
-/* BOTÃO IA – placeholder, você liga depois na API que quiser */
-document.getElementById("btnIA").addEventListener("click", async ()=>{
-  iaStatusEl.textContent = "Analisando imagens com IA...";
-  // Aqui no futuro você chama sua API de IA com as fotos.
-  // Por enquanto só simula:
-  setTimeout(()=>{
-    iaStatusEl.textContent = "A IA sugeriu dados para o item. Revise, escolha a categoria e o valor.";
-  },1200);
-});
-
-/* ================= RENDERIZAÇÃO DOS CARDS ============= */
-function aplicarBuscaOrdenacao(lista){
-  const termo = buscaInput.value.trim().toLowerCase();
-  let filtrados = lista;
-
-  if(termo){
-    filtrados = filtrados.filter(i=>
-      (i.nome||"").toLowerCase().includes(termo) ||
-      (i.marca||"").toLowerCase().includes(termo) ||
-      (i.modelo||"").toLowerCase().includes(termo)
-    );
-  }
-
-  const ord = filtroOrdenacao.value;
-  filtrados = [...filtrados];
-
-  if(ord === "nomeAZ"){
-    filtrados.sort((a,b)=>(a.nome||"").localeCompare(b.nome||""));
-  }else if(ord === "nomeZA"){
-    filtrados.sort((a,b)=>(b.nome||"").localeCompare(a.nome||""));
-  }else if(ord === "maisCaro"){
-    filtrados.sort((a,b)=>Number(b.valorPago||0)-Number(a.valorPago||0));
-  }else if(ord === "maisBarato"){
-    filtrados.sort((a,b)=>Number(a.valorPago||0)-Number(b.valorPago||0));
-  }else{
-    filtrados.sort((a,b)=>(Number(b.id||0)-Number(a.id||0))); // recentes
-  }
-
-  return filtrados;
-}
-
-function cardHtml(item){
-  const foto = item.foto1 || item.foto2 || item.foto3 || "";
-  const preco = Number(item.valorPago||0);
-  const precoFmt = "R$ " + preco.toFixed(2);
-
-  return `
-  <article class="card-item">
-    <div class="card-thumb">
-      ${foto ? `<img src="${foto}" alt="Foto do item">` : `<span style="font-size:22px;">📦</span>`}
-    </div>
-    <div class="card-body">
-      <div class="card-title-line">
-        <div class="card-item-name">${item.nome || "(sem nome)"}</div>
-        <div class="card-item-chip">${item.tipoColecao || "Coleção"}</div>
+    <!-- TOPBAR ADMIN -->
+    <header class="topbar">
+      <h1>Painel do Administrador</h1>
+      <div class="topbar-buttons">
+        <button id="btn-theme-toggle" class="btn btn-light">
+          🌙 Escuro
+        </button>
+        <button id="btn-sync-sheets" class="btn btn-light">
+          🔄 Sincronizar Sheets
+        </button>
+        <button id="btn-admin-logout" class="btn btn-gray">
+          Sair
+        </button>
       </div>
-      <div class="card-meta">
-        <span>${item.marca || "-"}</span>
-        <span>${item.modelo || "-"}</span>
-        <span>${item.anoLancamento || "-"}</span>
-      </div>
-      <div class="card-footer">
-        <div class="card-price">${precoFmt}</div>
-        <div class="card-actions">
-          <button class="card-btn" onclick="abrirGaleria('${item.foto1||""}','${item.foto2||""}','${item.foto3||""}')">Fotos</button>
-          ${isAdmin ? `<button class="card-btn card-btn-secondary" onclick="abrirModal('${item.id}')">Editar</button>` : ""}
+    </header>
+
+    <main class="content">
+      <!-- FORMULÁRIO DE CADASTRO -->
+      <section class="form-box">
+        <h2>Adicionar Item</h2>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="item-nome">Nome</label>
+            <input type="text" id="item-nome" placeholder="Nome do item">
+          </div>
+          <div class="form-field">
+            <label for="item-categoria">Categoria</label>
+            <input type="text" id="item-categoria" placeholder="Ex.: Carro, Figura...">
+          </div>
+          <div class="form-field">
+            <label for="item-marca">Marca</label>
+            <input type="text" id="item-marca" placeholder="Hot Wheels, Matchbox...">
+          </div>
+          <div class="form-field">
+            <label for="item-serie">Série</label>
+            <input type="text" id="item-serie" placeholder="Ex.: Fast &amp; Furious">
+          </div>
+          <div class="form-field">
+            <label for="item-modelo">Modelo</label>
+            <input type="text" id="item-modelo" placeholder="Nome do modelo">
+          </div>
+          <div class="form-field">
+            <label for="item-escala">Escala</label>
+            <input type="text" id="item-escala" placeholder="1:64, 1:18...">
+          </div>
+          <div class="form-field">
+            <label for="item-estado">Estado</label>
+            <input type="text" id="item-estado" placeholder="Lacrado, Excelente...">
+          </div>
+          <div class="form-field">
+            <label for="item-quantidade">Quantidade</label>
+            <input type="number" id="item-quantidade" min="1" value="1">
+          </div>
+          <div class="form-field">
+            <label for="item-valor">Valor (R$)</label>
+            <input type="number" id="item-valor" step="0.01" min="0">
+          </div>
+          <div class="form-field" style="grid-column: 1 / -1;">
+            <label for="item-observacoes">Observações</label>
+            <textarea id="item-observacoes" rows="2" placeholder="Detalhes adicionais, origem, condição..."></textarea>
+          </div>
         </div>
+
+        <div class="form-actions">
+          <button id="btn-add-item" class="btn btn-primary">
+            Adicionar
+          </button>
+          <button id="btn-export-csv" class="btn btn-light">
+            📤 Exportar CSV
+          </button>
+          <button id="btn-import-csv" class="btn btn-light">
+            📥 Importar CSV
+          </button>
+          <input
+            id="input-import-csv"
+            type="file"
+            accept=".csv"
+            style="display:none;"
+          >
+        </div>
+      </section>
+
+      <!-- FILTROS -->
+      <section class="filters-container">
+        <div class="filter-group" style="flex:1 1 220px;">
+          <label for="admin-search">Buscar</label>
+          <input
+            type="text"
+            id="admin-search"
+            placeholder="Buscar por nome, série, modelo..."
+          >
+        </div>
+
+        <div class="filter-group">
+          <label for="admin-filter-marca">Marca</label>
+          <select id="admin-filter-marca">
+            <option value="">Todas</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="admin-filter-escala">Escala</label>
+          <select id="admin-filter-escala">
+            <option value="">Todas</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="admin-filter-serie">Série</label>
+          <select id="admin-filter-serie">
+            <option value="">Todas</option>
+          </select>
+        </div>
+
+        <button id="btn-admin-clear-filters" class="btn btn-gray">
+          Limpar filtros
+        </button>
+      </section>
+
+      <!-- TABELA ADMIN -->
+      <section class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Marca</th>
+              <th>Série</th>
+              <th>Modelo</th>
+              <th>Escala</th>
+              <th>Estado</th>
+              <th>Qtd</th>
+              <th>Valor</th>
+              <th>Origem</th>
+              <th>Localização</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body">
+            <!-- preenche via JS -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- DASHBOARD -->
+      <section class="dashboard-container">
+        <h2>Dashboard da Coleção</h2>
+        <p style="font-size:0.9rem; color:var(--text-soft);">
+          Visão rápida da sua coleção por marca, escala e valor total.
+        </p>
+        <canvas id="chart-main" height="260"></canvas>
+      </section>
+    </main>
+  </section>
+
+  <!-- =======================
+       TELA VISITANTE
+  ======================== -->
+  <section id="visitor-screen" class="screen hidden">
+
+    <header class="topbar">
+      <h1>Modo Visitante</h1>
+      <div class="topbar-buttons">
+        <button id="btn-theme-toggle-visitor" class="btn btn-light">
+          🌙 Escuro
+        </button>
+        <button id="btn-visitor-logout" class="btn btn-gray">
+          Sair
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- FILTROS VISITANTE -->
+      <section class="filters-container">
+        <div class="filter-group" style="flex:1 1 220px;">
+          <label for="visitor-search">Buscar</label>
+          <input
+            type="text"
+            id="visitor-search"
+            placeholder="Buscar por nome, série, modelo..."
+          >
+        </div>
+
+        <div class="filter-group">
+          <label for="visitor-filter-marca">Marca</label>
+          <select id="visitor-filter-marca">
+            <option value="">Todas</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="visitor-filter-escala">Escala</label>
+          <select id="visitor-filter-escala">
+            <option value="">Todas</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="visitor-filter-serie">Série</label>
+          <select id="visitor-filter-serie">
+            <option value="">Todas</option>
+          </select>
+        </div>
+
+        <button id="btn-visitor-clear-filters" class="btn btn-gray">
+          Limpar filtros
+        </button>
+      </section>
+
+      <!-- TABELA VISITANTE -->
+      <section class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Marca</th>
+              <th>Série</th>
+              <th>Modelo</th>
+              <th>Escala</th>
+              <th>Estado</th>
+              <th>Qtd</th>
+              <th>Origem</th>
+              <th>Localização</th>
+            </tr>
+          </thead>
+          <tbody id="visitor-table-body">
+            <!-- preenche via JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </section>
+
+  <!-- =======================
+       MODAL GLOBAL (EDIÇÃO, ALERTAS, ETC.)
+  ======================== -->
+  <div id="modal-container">
+    <div class="modal-backdrop"></div>
+    <div class="modal">
+      <div id="modal-content">
+        <!-- conteúdo gerado via JS (modals.js) -->
       </div>
     </div>
-  </article>`;
-}
+  </div>
 
-function renderizarCards(){
-  const colecao = itens.filter(i=>i.categoria==="Colecao");
-  const prev    = itens.filter(i=>i.categoria==="Prevenda");
-  const gar     = itens.filter(i=>i.categoria==="Garagem");
+  <!-- =======================
+       SCRIPTS
+  ======================== -->
+  <!-- Núcleo -->
+  <script src="assets/js/core/utils.js"></script>
+  <script src="assets/js/core/sheets.js"></script>
+  <script src="assets/js/core/auth.js"></script>
 
-  const cardsColecao  = document.getElementById("cardsColecao");
-  const cardsPrevenda = document.getElementById("cardsPrevenda");
-  const cardsGaragem  = document.getElementById("cardsGaragem");
+  <!-- UI / componentes -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/js/ui/modals.js"></script>
+  <script src="assets/js/ui/theme.js"></script>
+  <script src="assets/js/ui/table.js"></script>
+  <script src="assets/js/ui/charts.js"></script>
+  <script src="assets/js/ui/filters.js"></script>
 
-  cardsColecao.innerHTML  = aplicarBuscaOrdenacao(colecao).map(cardHtml).join("") || "<p style='font-size:12px;color:#9ca3af;padding:8px;'>Nenhum item na coleção.</p>";
-  cardsPrevenda.innerHTML = aplicarBuscaOrdenacao(prev).map(cardHtml).join("")    || "<p style='font-size:12px;color:#9ca3af;padding:8px;'>Nenhum item em pré-venda.</p>";
-  cardsGaragem.innerHTML  = aplicarBuscaOrdenacao(gar).map(cardHtml).join("")    || "<p style='font-size:12px;color:#9ca3af;padding:8px;'>Nenhum item armazenado.</p>";
-}
+  <!-- Páginas -->
+  <script src="assets/js/pages/welcome.js"></script>
+  <script src="assets/js/pages/admin.js"></script>
+  <script src="assets/js/pages/visitor.js"></script>
 
-/* DASHBOARD */
-function atualizarDashboard(){
-  const colecao = itens.filter(i=>i.categoria==="Colecao");
-  const prev    = itens.filter(i=>i.categoria==="Prevenda");
-  const gar     = itens.filter(i=>i.categoria==="Garagem");
-
-  const soma = arr => arr.reduce((acc,i)=>acc+Number(i.valorPago||0),0);
-
-  document.getElementById("dashValorColecao").innerText =
-    "R$ " + soma(colecao).toFixed(2);
-  document.getElementById("dashQtdColecao").innerText =
-    colecao.length + " itens";
-
-  document.getElementById("dashValorPrevenda").innerText =
-    "R$ " + soma(prev).toFixed(2);
-  document.getElementById("dashQtdPrevenda").innerText =
-    prev.length + " itens";
-
-  document.getElementById("dashValorGaragem").innerText =
-    "R$ " + soma(gar).toFixed(2);
-  document.getElementById("dashQtdGaragem").innerText =
-    gar.length + " itens";
-}
-
-/* Expor algumas funções no escopo global (para onclick) */
-window.abrirModal = abrirModal;
-window.fecharGaleria = fecharGaleria;
-window.abrirGaleria = abrirGaleria;
-
-/* Carrega dados ao abrir a página */
-carregarItensDaPlanilha();
-</script>
+  <!-- Inicialização -->
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
