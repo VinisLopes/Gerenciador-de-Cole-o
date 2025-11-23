@@ -5,13 +5,11 @@
   <title>Gerenciador de Coleção</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- CSS base + temas -->
-  <link rel="stylesheet" href="assets/css/base.css">
-  <link rel="stylesheet" href="assets/css/table.css">
-  <link rel="stylesheet" href="assets/css/theme-light.css">
-  <link rel="stylesheet" href="assets/css/theme-dark.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/table.css">
+  <link rel="stylesheet" href="css/theme-light.css">
+  <link rel="stylesheet" href="css/theme-dark.css">
 
-  <!-- Fonte (opcional, mas combina bem) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -20,21 +18,15 @@
   >
 </head>
 
-<!-- Começamos no tema claro; o JS (theme.js) alterna theme-light / theme-dark -->
 <body class="theme-light">
 
-  <!-- =======================
-       TELA DE BOAS-VINDAS
-  ======================== -->
   <section id="welcome-screen" class="screen">
     <div class="welcome-container">
       <h1 class="title">Gerenciador de Coleção</h1>
       <p class="subtitle">Escolha como deseja acessar</p>
 
       <div class="welcome-box">
-        <!-- CARD VISITANTE -->
         <article class="card">
-          <!-- Ícone (coloque uma imagem em assets/img/visitor.svg se quiser) -->
           <img src="assets/img/visitor.svg" alt="Visitante" class="card-icon" onerror="this.style.display='none'">
 
           <h2>Modo Visitante</h2>
@@ -51,7 +43,6 @@
           </button>
         </article>
 
-        <!-- CARD ADMIN -->
         <article class="card">
           <img src="assets/img/admin.svg" alt="Administrador" class="card-icon" onerror="this.style.display='none'">
 
@@ -71,9 +62,6 @@
     </div>
   </section>
 
-  <!-- =======================
-       TELA DE LOGIN ADMIN
-  ======================== -->
   <section id="admin-login-screen" class="screen hidden">
     <div class="login-container">
       <h1>Acesso Administrativo</h1>
@@ -96,12 +84,8 @@
     </div>
   </section>
 
-  <!-- =======================
-       TELA ADMINISTRADOR
-  ======================== -->
   <section id="admin-screen" class="screen hidden">
 
-    <!-- TOPBAR ADMIN -->
     <header class="topbar">
       <h1>Painel do Administrador</h1>
       <div class="topbar-buttons">
@@ -118,7 +102,6 @@
     </header>
 
     <main class="content">
-      <!-- FORMULÁRIO DE CADASTRO -->
       <section class="form-box">
         <h2>Adicionar Item</h2>
 
@@ -184,7 +167,6 @@
         </div>
       </section>
 
-      <!-- FILTROS -->
       <section class="filters-container">
         <div class="filter-group" style="flex:1 1 220px;">
           <label for="admin-search">Buscar</label>
@@ -221,7 +203,6 @@
         </button>
       </section>
 
-      <!-- TABELA ADMIN -->
       <section class="table-container">
         <table>
           <thead>
@@ -241,12 +222,10 @@
             </tr>
           </thead>
           <tbody id="admin-table-body">
-            <!-- preenche via JS -->
-          </tbody>
+            </tbody>
         </table>
       </section>
 
-      <!-- DASHBOARD -->
       <section class="dashboard-container">
         <h2>Dashboard da Coleção</h2>
         <p style="font-size:0.9rem; color:var(--text-soft);">
@@ -257,9 +236,6 @@
     </main>
   </section>
 
-  <!-- =======================
-       TELA VISITANTE
-  ======================== -->
   <section id="visitor-screen" class="screen hidden">
 
     <header class="topbar">
@@ -275,7 +251,6 @@
     </header>
 
     <main class="content">
-      <!-- FILTROS VISITANTE -->
       <section class="filters-container">
         <div class="filter-group" style="flex:1 1 220px;">
           <label for="visitor-search">Buscar</label>
@@ -312,7 +287,6 @@
         </button>
       </section>
 
-      <!-- TABELA VISITANTE -->
       <section class="table-container">
         <table>
           <thead>
@@ -330,47 +304,35 @@
             </tr>
           </thead>
           <tbody id="visitor-table-body">
-            <!-- preenche via JS -->
-          </tbody>
+            </tbody>
         </table>
       </section>
     </main>
   </section>
 
-  <!-- =======================
-       MODAL GLOBAL (EDIÇÃO, ALERTAS, ETC.)
-  ======================== -->
   <div id="modal-container">
     <div class="modal-backdrop"></div>
     <div class="modal">
       <div id="modal-content">
-        <!-- conteúdo gerado via JS (modals.js) -->
-      </div>
+        </div>
     </div>
   </div>
 
-  <!-- =======================
-       SCRIPTS
-  ======================== -->
-  <!-- Núcleo -->
-  <script src="assets/js/core/utils.js"></script>
-  <script src="assets/js/core/sheets.js"></script>
-  <script src="assets/js/core/auth.js"></script>
+  <script src="js/core/utils.js"></script>
+  <script src="js/core/sheets.js"></script>
+  <script src="js/core/auth.js"></script>
 
-  <!-- UI / componentes -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="assets/js/ui/modals.js"></script>
-  <script src="assets/js/ui/theme.js"></script>
-  <script src="assets/js/ui/table.js"></script>
-  <script src="assets/js/ui/charts.js"></script>
-  <script src="assets/js/ui/filters.js"></script>
+  <script src="js/ui/modals.js"></script>
+  <script src="js/ui/theme.js"></script>
+  <script src="js/ui/table.js"></script>
+  <script src="js/ui/charts.js"></script>
+  <script src="js/ui/filters.js"></script>
 
-  <!-- Páginas -->
-  <script src="assets/js/pages/welcome.js"></script>
-  <script src="assets/js/pages/admin.js"></script>
-  <script src="assets/js/pages/visitor.js"></script>
+  <script src="js/pages/welcome.js"></script>
+  <script src="js/pages/admin.js"></script>
+  <script src="js/pages/visitor.js"></script>
 
-  <!-- Inicialização -->
-  <script src="assets/js/main.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
