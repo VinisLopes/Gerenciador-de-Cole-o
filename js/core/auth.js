@@ -13,7 +13,8 @@ const ADMIN_PASSWORD = "admin123";
 ------------------------------------------ */
 const Auth = {
     login() {
-        const input = document.getElementById("admin-password");
+        // ID do input de senha corrigido para "admin-password-input"
+        const input = document.getElementById("admin-password-input");
         const password = input.value.trim();
 
         if (password === "") {
@@ -42,3 +43,10 @@ const Auth = {
         changeScreen("welcome");
     }
 };
+
+/* -----------------------------------------
+   Inicializa listeners
+------------------------------------------ */
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("btn-admin-login")?.addEventListener("click", Auth.login);
+});

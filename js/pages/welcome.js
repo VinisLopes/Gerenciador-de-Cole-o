@@ -37,3 +37,13 @@ const Welcome = {
         changeScreen("welcome");
     }
 };
+
+// Adiciona listeners para os botões da tela inicial
+document.addEventListener("DOMContentLoaded", () => {
+    // Botões da tela de Boas-Vindas
+    document.getElementById("btn-visitor")?.addEventListener("click", Welcome.enterVisitor);
+    document.getElementById("btn-admin")?.addEventListener("click", Welcome.showAdminLogin);
+
+    // Botão Voltar da tela de Login
+    document.getElementById("btn-admin-back")?.addEventListener("click", Welcome.backToMain);
+});
